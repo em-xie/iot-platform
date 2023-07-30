@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.xie</groupId>
+        <artifactId>backend-template</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>pure-common</artifactId>
+    <packaging>pom</packaging>
+
+
+
+    <description>
+        common 通用模块
+    </description>
+    <modules>
+        <module>pure-common-bom</module>
+        <module>pure-common-core</module>
+        <module>pure-common-doc</module>
+        <module>pure-common-web</module>
+        <module>pure-common-mybatis</module>
+        <module>pure-common-satoken</module>
+        <module>pure-common-security</module>
+        <module>pure-common-json</module>
+        <module>pure-common-social</module>
+        <module>pure-common-redis</module>
+        <module>pure-common-excel</module>
+        <module>pure-common-encrypt</module>
+        <module>pure-common-oss</module>
+        <module>pure-common-log</module>
+        <module>pure-common-mail</module>
+        <module>pure-common-websocket</module>
+    </modules>
+</project>

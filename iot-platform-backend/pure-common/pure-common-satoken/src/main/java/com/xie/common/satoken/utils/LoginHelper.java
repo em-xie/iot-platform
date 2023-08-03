@@ -7,6 +7,7 @@ import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
+import com.xie.common.core.constant.UserConstants;
 import com.xie.common.core.domain.model.LoginUser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,17 @@ public class LoginHelper {
         return loginUser;
     }
 
+    /**
+     * 获取用户基于token
+     */
+    public static LoginUser getLoginUser(String token) {
+        SaSession session = StpUtil.getTokenSessionByToken(token);
+        if (ObjectUtil.isNull(session)) {
+            return null;
+        }
+        return (LoginUser) session.get(LOGIN_USER_KEY);
+    }
+
 
     /**
      * 登录系统 基于 设备类型
@@ -92,5 +104,19 @@ public class LoginHelper {
      */
     public static String getUsername() {
         return getLoginUser().getUsername();
+    }
+
+    /**
+     * 是否为超级管理员
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    public static boolean isSuperAdmin(Long userId) {
+        return UserConstants.SUPER_ADMIN_ID.equals(userId);
+    }
+
+    public static boolean isSuperAdmin() {
+        return isSuperAdmin(getUserId());
     }
 }

@@ -1,5 +1,6 @@
 package com.xie.common.core.domain.model;
 
+import com.xie.common.core.domain.dto.RoleDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -71,11 +72,31 @@ public class LoginUser implements Serializable {
      */
     private String os;
 
+    /**
+     * 菜单权限
+     */
+    private Set<String> menuPermission;
+
+    /**
+     * 角色权限
+     */
+    private Set<String> rolePermission;
+
 
     /**
      * 用户名
      */
     private String username;
+
+    /**
+     * 角色对象
+     */
+    private List<RoleDTO> roles;
+
+    /**
+     * 数据权限 当前角色ID
+     */
+    private Long roleId;
 
 
     /**

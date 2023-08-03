@@ -129,4 +129,6 @@ public interface UserConstants {
      */
     Long SUPER_ADMIN_ID = 1L;
 
+    String SUPER_ADMIN_ROLE_KEY = "superadmin";
+
 }

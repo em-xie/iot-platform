@@ -5,12 +5,14 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.xie.common.core.domain.R;
+import com.xie.common.core.domain.dto.RoleDTO;
 import com.xie.common.core.domain.model.LoginUser;
 import com.xie.common.core.enums.LoginType;
 import com.xie.common.core.exception.UserException;
 import com.xie.common.satoken.utils.LoginHelper;
 import com.xie.system.domain.bo.SysSocialBo;
 import com.xie.system.domain.vo.SysUserVo;
+import com.xie.system.service.ISysPermissionService;
 import com.xie.system.service.ISysSocialService;
 import com.xie.web.domain.LoginVo;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ import java.util.function.Supplier;
 public class SysLoginService {
 
     private final ISysSocialService sysSocialService;
+    private final ISysPermissionService permissionService;
     public void checkLogin(LoginType loginType, String username,  Supplier<Boolean> supplier) {
         int errorNumber = 0;
         if(supplier.get()){
@@ -46,6 +49,10 @@ public class SysLoginService {
         loginUser.setUserId(user.getUserId());
         loginUser.setUsername(user.getUserName());
         loginUser.setUserType(user.getUserType());
+        loginUser.setMenuPermission(permissionService.getMenuPermission(user.getUserId()));
+        loginUser.setRolePermission(permissionService.getRolePermission(user.getUserId()));
+        List<RoleDTO> roles = BeanUtil.copyToList(user.getRoles(), RoleDTO.class);
+        loginUser.setRoles(roles);
         return loginUser;
     }
 
@@ -61,6 +68,10 @@ public class SysLoginService {
         return R.ok();
 
     }
+    /**
+     * 构建登录用户
+     */
+
 
     public void logout() {
         try {

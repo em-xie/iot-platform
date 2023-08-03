@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.xie</groupId>
-    <artifactId>backend-template</artifactId>
+    <artifactId>iot-platform</artifactId>
     <version>${revision}</version>
 
-    <name>backend-template</name>
-    <url>https://gitee.com/eminem-my-love/backend-template</url>
-    <description>沉淀</description>
+    <name>iot-platform</name>
+    <url>https://gitee.com/eminem-my-love/iot-platform</url>
+    <description>物联网平台</description>
 
     <properties>
         <revision>0.0.1-SNAPSHOT</revision>

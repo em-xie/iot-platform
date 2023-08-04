@@ -24,9 +24,9 @@
         <springdoc.version>2.1.0</springdoc.version>
         <therapi-javadoc.version>0.15.0</therapi-javadoc.version>
         <poi.version>5.2.3</poi.version>
+        <p6spy.version>3.9.1</p6spy.version>
         <easyexcel.version>3.3.1</easyexcel.version>
         <hutool.version>5.8.18</hutool.version>
-        <spring-boot.mybatis>3.0.1</spring-boot.mybatis>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <bouncycastle.version>1.72</bouncycastle.version>
         <okhttp.version>4.10.0</okhttp.version>
@@ -35,7 +35,7 @@
         <mapstruct-plus.version>1.3.1</mapstruct-plus.version>
         <mapstruct-plus.lombok.version>0.2.0</mapstruct-plus.lombok.version>
         <justauth.version>1.16.5</justauth.version>
-
+        <dynamic-ds.version>4.1.1</dynamic-ds.version>
         <!-- OSS 配置 -->
         <aws-java-sdk-s3.version>1.12.400</aws-java-sdk-s3.version>
 
@@ -93,6 +93,24 @@
             </dependency>
 
             <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${spring-boot.mybatis}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-annotation</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
@@ -117,11 +135,21 @@
                 <version>${justauth.version}</version>
             </dependency>
 
+
+            <!-- dynamic-datasource 多数据源-->
             <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${spring-boot.mybatis}</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
+                <version>${dynamic-ds.version}</version>
             </dependency>
+
+            <!-- sql性能分析插件 -->
+            <dependency>
+                <groupId>p6spy</groupId>
+                <artifactId>p6spy</artifactId>
+                <version>${p6spy.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>com.amazonaws</groupId>
@@ -192,12 +220,6 @@
             </dependency>
 
 
-
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
-            </dependency>
 
             <!-- 加密包引入 -->
             <dependency>

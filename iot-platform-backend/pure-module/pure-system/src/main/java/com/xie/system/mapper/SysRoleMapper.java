@@ -57,4 +57,5 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole, SysRoleVo> {
      */
     List<SysRoleVo> selectRolesByUserName(String userName);
 
+    SysRoleVo selectRoleByRoleKey(Long roleKey);
 }

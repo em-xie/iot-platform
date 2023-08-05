@@ -47,4 +47,6 @@ public interface SysUserMapper extends BaseMapperPlus<SysUser, SysUserVo> {
      */
 
     Page<SysUserVo> selectUnallocatedList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
+
+    Page<SysUserVo> selectPageUserList(@Param("page") Page<SysUser> page, @Param(Constants.WRAPPER) Wrapper<SysUser> queryWrapper);
 }

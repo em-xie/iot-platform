@@ -62,4 +62,8 @@
         WHERE r.del_flag = '0' and r.role_id = #{roleId}
     </select>
 
+    <select id="selectRoleByRoleKey" resultMap="SysRoleResult">
+        <include refid="selectRoleVo"/>
+        WHERE r.del_flag = '0' and r.role_key = #{roleKey}
+    </select>
 </mapper>

@@ -176,4 +176,12 @@ public interface ISysRoleService {
     int insertAuthUsers(Long roleId, Long[] userIds);
 
     void cleanOnlineUserByRole(Long roleId);
+
+    /**
+     * 通过角色ID查询角色
+     *
+     * @param roleKey 角色ID
+     * @return 角色对象信息
+     */
+    SysRoleVo selectRoleByRoleKey(Long roleKey);
 }

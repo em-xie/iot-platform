@@ -44,6 +44,14 @@ public class SysUserController extends BaseController {
     private final ISysUserService userService;
     private final ISysRoleService roleService;
 
+    /**
+     * 获取用户列表
+     */
+    @SaCheckPermission("system:user:list")
+    @GetMapping("/list")
+    public TableDataInfo<SysUserVo> list(SysUserBo user, PageQuery pageQuery) {
+        return userService.selectPageUserList(user, pageQuery);
+    }
 
 
     /**
@@ -60,6 +68,18 @@ public class SysUserController extends BaseController {
         userInfoVo.setPermissions(loginUser.getMenuPermission());
         userInfoVo.setRoles(loginUser.getRolePermission());
         return R.ok(userInfoVo);
+    }
+
+    /**
+     * 状态修改
+     */
+    @SaCheckPermission("system:user:edit")
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @PutMapping("/changeStatus")
+    public R<Void> changeStatus(@RequestBody SysUserBo user) {
+        userService.checkUserAllowed(user.getUserId());
+//        userService.checkUserDataScope(user.getUserId());
+        return toAjax(userService.updateUserStatus(user.getUserId(), user.getStatus()));
     }
 
 

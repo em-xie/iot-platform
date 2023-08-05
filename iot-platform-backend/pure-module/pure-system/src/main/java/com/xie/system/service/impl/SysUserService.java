@@ -2,15 +2,19 @@ package com.xie.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xie.common.core.constant.UserConstants;
+import com.xie.common.core.exception.ServiceException;
 import com.xie.common.core.utils.MapstructUtils;
 import com.xie.common.core.utils.StringUtils;
 import com.xie.common.mybatis.core.page.PageQuery;
 import com.xie.common.mybatis.core.page.TableDataInfo;
+import com.xie.common.satoken.utils.LoginHelper;
 import com.xie.system.domain.SysUser;
 import com.xie.system.domain.bo.SysUserBo;
 import com.xie.system.domain.vo.SysUserVo;
@@ -22,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @作者：xie
@@ -97,4 +102,52 @@ public class SysUserService implements ISysUserService {
         Page<SysUserVo> page = baseMapper.selectUnallocatedList(pageQuery.build(), wrapper);
         return TableDataInfo.build(page);
     }
+
+    @Override
+    public TableDataInfo<SysUserVo> selectPageUserList(SysUserBo user, PageQuery pageQuery) {
+        Page<SysUserVo> page = baseMapper.selectPageUserList(pageQuery.build(), this.buildQueryWrapper(user));
+        return TableDataInfo.build(page);
+    }
+
+    private Wrapper<SysUser> buildQueryWrapper(SysUserBo user) {
+        Map<String, Object> params = user.getParams();
+        QueryWrapper<SysUser> wrapper = Wrappers.query();
+        wrapper.eq("u.del_flag", UserConstants.USER_NORMAL)
+                .eq(ObjectUtil.isNotNull(user.getUserId()), "u.user_id", user.getUserId())
+                .like(StringUtils.isNotBlank(user.getUserName()), "u.user_name", user.getUserName())
+                .eq(StringUtils.isNotBlank(user.getStatus()), "u.status", user.getStatus())
+                .like(StringUtils.isNotBlank(user.getPhonenumber()), "u.phonenumber", user.getPhonenumber())
+                .between(params.get("beginTime") != null && params.get("endTime") != null,
+                        "r.create_time", params.get("beginTime"), params.get("endTime"));
+        return wrapper;
+    }
+
+
+    /**
+     * 校验用户是否允许操作
+     *
+     * @param userId 用户ID
+     */
+    @Override
+    public void checkUserAllowed(Long userId) {
+        if (ObjectUtil.isNotNull(userId) && LoginHelper.isSuperAdmin(userId)) {
+            throw new ServiceException("不允许操作超级管理员用户");
+        }
+    }
+
+    /**
+     * 修改用户状态
+     *
+     * @param userId 用户ID
+     * @param status 帐号状态
+     * @return 结果
+     */
+    @Override
+    public int updateUserStatus(Long userId, String status) {
+        return baseMapper.update(null,
+                new LambdaUpdateWrapper<SysUser>()
+                        .set(SysUser::getStatus, status)
+                        .eq(SysUser::getUserId, userId));
+    }
+
 }

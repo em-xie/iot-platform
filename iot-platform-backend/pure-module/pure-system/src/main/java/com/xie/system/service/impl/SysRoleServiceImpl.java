@@ -76,7 +76,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
             .like(StringUtils.isNotBlank(bo.getRoleKey()), "r.role_key", bo.getRoleKey())
             .between(params.get("beginTime") != null && params.get("endTime") != null,
                 "r.create_time", params.get("beginTime"), params.get("endTime"))
-            .orderByAsc("r.role_sort").orderByAsc("r.create_time");;
+            .orderByAsc("r.role_sort").orderByAsc("r.create_time");
         return wrapper;
     }
 
@@ -443,5 +443,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
                 }
             }
         });
+    }
+
+    @Override
+    public SysRoleVo selectRoleByRoleKey(Long roleKey) {
+        return baseMapper.selectRoleByRoleKey(roleKey);
     }
 }

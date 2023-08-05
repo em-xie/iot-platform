@@ -39,4 +39,10 @@ public interface ISysUserService {
      * @return 用户信息集合信息
      */
     TableDataInfo<SysUserVo> selectUnallocatedList(SysUserBo user, PageQuery pageQuery);
+
+    TableDataInfo<SysUserVo> selectPageUserList(SysUserBo user, PageQuery pageQuery);
+
+    void checkUserAllowed(Long userId);
+
+    int updateUserStatus(Long userId, String status);
 }

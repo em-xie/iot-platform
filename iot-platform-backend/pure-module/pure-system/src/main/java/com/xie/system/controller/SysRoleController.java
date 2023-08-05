@@ -41,7 +41,7 @@ public class SysRoleController extends BaseController {
     /**
      * 获取角色信息列表
      */
-    @SaCheckPermission("system:role:list")
+//    @SaCheckPermission("system:role:list")
     @GetMapping("/list")
     public TableDataInfo<SysRoleVo> list(SysRoleBo role, PageQuery pageQuery) {
         return roleService.selectPageRoleList(role, pageQuery);
@@ -63,7 +63,7 @@ public class SysRoleController extends BaseController {
      *
      * @param roleId 角色ID
      */
-    @SaCheckPermission("system:role:query")
+//    @SaCheckPermission("system:role:query")
     @GetMapping(value = "/{roleId}")
     public R<SysRoleVo> getInfo(@PathVariable Long roleId) {
         roleService.checkRoleDataScope(roleId);
@@ -208,6 +208,7 @@ public class SysRoleController extends BaseController {
         roleService.checkRoleDataScope(roleId);
         return toAjax(roleService.insertAuthUsers(roleId, userIds));
     }
+
 
 
 }

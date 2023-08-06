@@ -6,6 +6,7 @@ import com.xie.common.mybatis.core.page.PageQuery;
 import com.xie.common.mybatis.core.page.TableDataInfo;
 import com.xie.system.domain.SysUserRole;
 import com.xie.system.domain.bo.SysRoleBo;
+import com.xie.system.domain.vo.SysRoleSelectKeyVo;
 import com.xie.system.domain.vo.SysRoleVo;
 
 import java.util.List;
@@ -184,4 +185,6 @@ public interface ISysRoleService {
      * @return 角色对象信息
      */
     SysRoleVo selectRoleByRoleKey(Long roleKey);
+
+    List<SysRoleSelectKeyVo> selectRoleKey();
 }

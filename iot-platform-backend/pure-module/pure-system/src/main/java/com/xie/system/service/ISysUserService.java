@@ -45,4 +45,22 @@ public interface ISysUserService {
     void checkUserAllowed(Long userId);
 
     int updateUserStatus(Long userId, String status);
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    boolean checkPhoneUnique(SysUserBo user);
+
+    /**
+     * 校验email是否唯一
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    boolean checkEmailUnique(SysUserBo user);
+
+    int insertUser(SysUserBo user);
 }

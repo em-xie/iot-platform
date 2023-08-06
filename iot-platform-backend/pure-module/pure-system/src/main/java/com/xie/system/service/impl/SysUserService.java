@@ -1,6 +1,7 @@
 package com.xie.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -11,19 +12,24 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xie.common.core.constant.UserConstants;
 import com.xie.common.core.exception.ServiceException;
 import com.xie.common.core.utils.MapstructUtils;
+import com.xie.common.core.utils.StreamUtils;
 import com.xie.common.core.utils.StringUtils;
 import com.xie.common.mybatis.core.page.PageQuery;
 import com.xie.common.mybatis.core.page.TableDataInfo;
 import com.xie.common.satoken.utils.LoginHelper;
 import com.xie.system.domain.SysUser;
+import com.xie.system.domain.SysUserRole;
 import com.xie.system.domain.bo.SysUserBo;
+import com.xie.system.domain.vo.SysRoleVo;
 import com.xie.system.domain.vo.SysUserVo;
+import com.xie.system.mapper.SysRoleMapper;
 import com.xie.system.mapper.SysUserMapper;
 import com.xie.system.mapper.SysUserRoleMapper;
 import com.xie.system.service.ISysUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +45,8 @@ public class SysUserService implements ISysUserService {
 
     private final SysUserMapper baseMapper;
     private final SysUserRoleMapper userRoleMapper;
+    private final SysRoleMapper roleMapper;
+
     @Override
     public boolean checkUserNameUnique(SysUserBo sysUser) {
         boolean exists = baseMapper.exists(new LambdaQueryWrapper<SysUser>()
@@ -149,5 +157,98 @@ public class SysUserService implements ISysUserService {
                         .set(SysUser::getStatus, status)
                         .eq(SysUser::getUserId, userId));
     }
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param user 用户信息
+     */
+    @Override
+    public boolean checkPhoneUnique(SysUserBo user) {
+        boolean exist = baseMapper.exists(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getPhonenumber, user.getPhonenumber())
+                .ne(ObjectUtil.isNotNull(user.getUserId()), SysUser::getUserId, user.getUserId()));
+        return !exist;
+    }
+
+    /**
+     * 校验email是否唯一
+     *
+     * @param user 用户信息
+     */
+    @Override
+    public boolean checkEmailUnique(SysUserBo user) {
+        boolean exist = baseMapper.exists(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getEmail, user.getEmail())
+                .ne(ObjectUtil.isNotNull(user.getUserId()), SysUser::getUserId, user.getUserId()));
+        return !exist;
+    }
+
+
+    /**
+     * 新增保存用户信息
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int insertUser(SysUserBo user) {
+        SysUser sysUser = MapstructUtils.convert(user, SysUser.class);
+        // 新增用户信息
+        int rows = baseMapper.insert(sysUser);
+        user.setUserId(sysUser.getUserId());
+        // 新增用户与角色管理
+        insertUserRole(user, false);
+        return rows;
+    }
+
+    /**
+     * 新增用户角色信息
+     *
+     * @param user  用户对象
+     * @param clear 清除已存在的关联数据
+     */
+    private void insertUserRole(SysUserBo user, boolean clear) {
+        this.insertUserRole(user.getUserId(), user.getRoleIds(), clear);
+    }
+
+    /**
+     * 新增用户角色信息
+     *
+     * @param userId  用户ID
+     * @param roleIds 角色组
+     * @param clear   清除已存在的关联数据
+     */
+    private void insertUserRole(Long userId, Long[] roleIds, boolean clear) {
+        if (ArrayUtil.isNotEmpty(roleIds)) {
+            // 判断是否具有此角色的操作权限
+            List<SysRoleVo> roles = roleMapper.selectRoleList(new LambdaQueryWrapper<>());
+            if (CollUtil.isEmpty(roles)) {
+                throw new ServiceException("没有权限访问角色的数据");
+            }
+            List<Long> roleList = StreamUtils.toList(roles, SysRoleVo::getRoleId);
+            if (!LoginHelper.isSuperAdmin(userId)) {
+                roleList.remove(UserConstants.SUPER_ADMIN_ID);
+            }
+            List<Long> canDoRoleList = StreamUtils.filter(List.of(roleIds), roleList::contains);
+            if (CollUtil.isEmpty(canDoRoleList)) {
+                throw new ServiceException("没有权限访问角色的数据");
+            }
+            if (clear) {
+                // 删除用户与角色关联
+                userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userId));
+            }
+            // 新增用户与角色管理
+            List<SysUserRole> list = StreamUtils.toList(canDoRoleList, roleId -> {
+                SysUserRole ur = new SysUserRole();
+                ur.setUserId(userId);
+                ur.setRoleId(roleId);
+                return ur;
+            });
+            userRoleMapper.insertBatch(list);
+        }
+    }
+
 
 }

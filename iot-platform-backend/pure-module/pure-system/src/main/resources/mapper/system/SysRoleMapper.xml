@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xie.system.mapper.SysRoleMapper">
 
-    <resultMap type="com.xie.system.domain.vo.SysRoleVo" id="SysRoleResult">
+    <resultMap
+            type="com.xie.system.domain.vo.SysRoleVo" id="SysRoleResult">
     </resultMap>
 
     <sql id="selectRoleVo">
@@ -32,6 +33,12 @@
         <include refid="selectRoleVo"/>
         ${ew.getCustomSqlSegment}
     </select>
+
+<!--    <select id="selectRoleKey" resultMap="SysRoleResult">-->
+<!--        select r.role_name,r.role_key-->
+<!--        from sys_role-->
+<!--        ${ew.getCustomSqlSegment}-->
+<!--    </select>-->
 
     <select id="selectRolePermissionByUserId" parameterType="Long" resultMap="SysRoleResult">
         <include refid="selectRoleVo"/>

@@ -1,7 +1,12 @@
 package com.xie.system.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.xie.common.mybatis.core.mapper.BaseMapperPlus;
+import com.xie.system.domain.SysRole;
 import com.xie.system.domain.SysUserRole;
+import com.xie.system.domain.vo.SysRoleVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,5 +18,7 @@ import java.util.List;
 public interface SysUserRoleMapper extends BaseMapperPlus<SysUserRole, SysUserRole> {
 
     List<Long> selectUserIdsByRoleId(Long roleId);
+
+
 
 }

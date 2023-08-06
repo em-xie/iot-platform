@@ -24,6 +24,7 @@ import com.xie.system.domain.SysRole;
 import com.xie.system.domain.SysRoleMenu;
 import com.xie.system.domain.SysUserRole;
 import com.xie.system.domain.bo.SysRoleBo;
+import com.xie.system.domain.vo.SysRoleSelectKeyVo;
 import com.xie.system.domain.vo.SysRoleVo;
 import com.xie.system.mapper.SysRoleMapper;
 import com.xie.system.mapper.SysRoleMenuMapper;
@@ -64,6 +65,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public List<SysRoleVo> selectRoleList(SysRoleBo role) {
         return baseMapper.selectRoleList(this.buildQueryWrapper(role));
+    }
+
+    public List<SysRoleSelectKeyVo> selectRoleKey() {
+        return baseMapper.selectRoleKey();
     }
 
     private Wrapper<SysRole> buildQueryWrapper(SysRoleBo bo) {
@@ -449,4 +454,6 @@ public class SysRoleServiceImpl implements ISysRoleService {
     public SysRoleVo selectRoleByRoleKey(Long roleKey) {
         return baseMapper.selectRoleByRoleKey(roleKey);
     }
+
+
 }

@@ -8,6 +8,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.xie.common.core.domain.R;
 import com.xie.common.core.domain.model.LoginUser;
 import com.xie.common.core.utils.MapstructUtils;
+import com.xie.common.core.utils.StringUtils;
 import com.xie.common.excel.utils.ExcelUtil;
 import com.xie.common.log.annotation.Log;
 import com.xie.common.log.enums.BusinessType;
@@ -82,5 +83,23 @@ public class SysUserController extends BaseController {
         return toAjax(userService.updateUserStatus(user.getUserId(), user.getStatus()));
     }
 
+    /**
+     * 新增用户
+     */
+    @SaCheckPermission("system:user:add")
+    @Log(title = "用户管理", businessType = BusinessType.INSERT)
+    @PostMapping
+    public R<Void> add(@Validated @RequestBody SysUserBo user) {
+        if (!userService.checkUserNameUnique(user)) {
+            return R.fail("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
+        } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
+            return R.fail("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
+        } else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
+            return R.fail("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
+        }
+
+        user.setPassword(BCrypt.hashpw(user.getPassword()));
+        return toAjax(userService.insertUser(user));
+    }
 
 }

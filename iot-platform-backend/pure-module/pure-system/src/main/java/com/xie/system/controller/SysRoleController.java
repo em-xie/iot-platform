@@ -11,6 +11,7 @@ import com.xie.common.web.core.BaseController;
 import com.xie.system.domain.SysUserRole;
 import com.xie.system.domain.bo.SysRoleBo;
 import com.xie.system.domain.bo.SysUserBo;
+import com.xie.system.domain.vo.SysRoleSelectKeyVo;
 import com.xie.system.domain.vo.SysRoleVo;
 import com.xie.system.domain.vo.SysUserVo;
 import com.xie.system.service.ISysRoleService;
@@ -150,9 +151,11 @@ public class SysRoleController extends BaseController {
      */
     @SaCheckPermission("system:role:query")
     @GetMapping("/optionselect")
-    public R<List<SysRoleVo>> optionselect() {
-        return R.ok(roleService.selectRoleAll());
+    public R<List<SysRoleSelectKeyVo>> optionselect() {
+//        return R.ok(roleService.selectRoleAll());
+        return R.ok(roleService.selectRoleKey());
     }
+
 
     /**
      * 查询已分配用户角色列表

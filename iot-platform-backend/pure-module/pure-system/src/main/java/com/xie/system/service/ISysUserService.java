@@ -63,4 +63,10 @@ public interface ISysUserService {
     boolean checkEmailUnique(SysUserBo user);
 
     int insertUser(SysUserBo user);
+
+    int deleteUserByIds(Long[] userIds);
+
+    int updateUser(SysUserBo user);
+
+    void insertUserAuth(Long userId, Long[] roleIds);
 }

@@ -62,6 +62,6 @@ public interface SysRoleMapper extends BaseMapperPlus<SysRole, SysRoleVo> {
     SysRoleVo selectRoleByRoleKey(Long roleKey);
 
 
-    @Select("select role_name as label,role_key as value from sys_role where  del_flag = '0'")
+    @Select("select role_name as label,role_id as value from sys_role where  del_flag = '0'")
     List<SysRoleSelectKeyVo> selectRoleKey();
 }

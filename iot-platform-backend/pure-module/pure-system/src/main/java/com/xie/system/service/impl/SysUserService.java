@@ -1,5 +1,6 @@
 package com.xie.system.service.impl;
 
+import cn.dev33.satoken.secure.BCrypt;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -248,6 +249,64 @@ public class SysUserService implements ISysUserService {
             });
             userRoleMapper.insertBatch(list);
         }
+    }
+
+    /**
+     * 批量删除用户信息
+     *
+     * @param userIds 需要删除的用户ID
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int deleteUserByIds(Long[] userIds) {
+        for (Long userId : userIds) {
+            checkUserAllowed(userId);
+        }
+        List<Long> ids = List.of(userIds);
+        // 删除用户与角色关联
+        userRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getUserId, ids));
+        // 防止更新失败导致的数据删除
+        int flag = baseMapper.deleteBatchIds(ids);
+        if (flag < 1) {
+            throw new ServiceException("删除用户失败!");
+        }
+        return flag;
+    }
+
+    /**
+     * 修改保存用户信息
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateUser(SysUserBo user) {
+        // 新增用户与角色管理
+        insertUserRole(user, true);
+        SysUser sysUser = MapstructUtils.convert(user, SysUser.class);
+        if (sysUser != null) {
+            sysUser.setPassword(BCrypt.hashpw(user.getPassword()));
+        }
+        // 防止错误更新后导致的数据误删除
+        int flag = baseMapper.updateById(sysUser);
+        if (flag < 1) {
+            throw new ServiceException("修改用户" + user.getUserName() + "信息失败");
+        }
+        return flag;
+    }
+
+    /**
+     * 用户授权角色
+     *
+     * @param userId  用户ID
+     * @param roleIds 角色组
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insertUserAuth(Long userId, Long[] roleIds) {
+        insertUserRole(userId, roleIds, true);
     }
 
 

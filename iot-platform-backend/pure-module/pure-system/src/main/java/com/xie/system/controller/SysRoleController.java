@@ -2,23 +2,16 @@ package com.xie.system.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.xie.common.core.domain.R;
-import com.xie.common.excel.utils.ExcelUtil;
 import com.xie.common.log.annotation.Log;
 import com.xie.common.log.enums.BusinessType;
 import com.xie.common.mybatis.core.page.PageQuery;
 import com.xie.common.mybatis.core.page.TableDataInfo;
 import com.xie.common.web.core.BaseController;
-import com.xie.system.domain.SysUserRole;
 import com.xie.system.domain.bo.SysRoleBo;
-import com.xie.system.domain.bo.SysUserBo;
 import com.xie.system.domain.vo.SysRoleSelectKeyVo;
 import com.xie.system.domain.vo.SysRoleVo;
-import com.xie.system.domain.vo.SysUserVo;
 import com.xie.system.service.ISysRoleService;
-import com.xie.system.service.ISysUserService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,35 +29,25 @@ import java.util.List;
 public class SysRoleController extends BaseController {
 
     private final ISysRoleService roleService;
-    private final ISysUserService userService;
+
 
 
     /**
      * 获取角色信息列表
      */
-//    @SaCheckPermission("system:role:list")
+    @SaCheckPermission("system:role:list")
     @GetMapping("/list")
     public TableDataInfo<SysRoleVo> list(SysRoleBo role, PageQuery pageQuery) {
         return roleService.selectPageRoleList(role, pageQuery);
     }
 
-    /**
-     * 导出角色信息列表
-     */
-    @Log(title = "角色管理", businessType = BusinessType.EXPORT)
-    @SaCheckPermission("system:role:export")
-    @PostMapping("/export")
-    public void export(SysRoleBo role, HttpServletResponse response) {
-        List<SysRoleVo> list = roleService.selectRoleList(role);
-        ExcelUtil.exportExcel(list, "角色数据", SysRoleVo.class, response);
-    }
 
     /**
      * 根据角色编号获取详细信息
      *
      * @param roleId 角色ID
      */
-//    @SaCheckPermission("system:role:query")
+    @SaCheckPermission("system:role:query")
     @GetMapping(value = "/{roleId}")
     public R<SysRoleVo> getInfo(@PathVariable Long roleId) {
         roleService.checkRoleDataScope(roleId);
@@ -157,60 +140,6 @@ public class SysRoleController extends BaseController {
     }
 
 
-    /**
-     * 查询已分配用户角色列表
-     */
-    @SaCheckPermission("system:role:list")
-    @GetMapping("/authUser/allocatedList")
-    public TableDataInfo<SysUserVo> allocatedList(SysUserBo user, PageQuery pageQuery) {
-        return userService.selectAllocatedList(user, pageQuery);
-    }
-
-    /**
-     * 查询未分配用户角色列表
-     */
-    @SaCheckPermission("system:role:list")
-    @GetMapping("/authUser/unallocatedList")
-    public TableDataInfo<SysUserVo> unallocatedList(SysUserBo user, PageQuery pageQuery) {
-        return userService.selectUnallocatedList(user, pageQuery);
-    }
-
-    /**
-     * 取消授权用户
-     */
-    @SaCheckPermission("system:role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-    @PutMapping("/authUser/cancel")
-    public R<Void> cancelAuthUser(@RequestBody SysUserRole userRole) {
-        return toAjax(roleService.deleteAuthUser(userRole));
-    }
-
-    /**
-     * 批量取消授权用户
-     *
-     * @param roleId  角色ID
-     * @param userIds 用户ID串
-     */
-    @SaCheckPermission("system:role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-    @PutMapping("/authUser/cancelAll")
-    public R<Void> cancelAuthUserAll(Long roleId, Long[] userIds) {
-        return toAjax(roleService.deleteAuthUsers(roleId, userIds));
-    }
-
-    /**
-     * 批量选择用户授权
-     *
-     * @param roleId  角色ID
-     * @param userIds 用户ID串
-     */
-    @SaCheckPermission("system:role:edit")
-    @Log(title = "角色管理", businessType = BusinessType.GRANT)
-    @PutMapping("/authUser/selectAll")
-    public R<Void> selectAuthUserAll(Long roleId, Long[] userIds) {
-        roleService.checkRoleDataScope(roleId);
-        return toAjax(roleService.insertAuthUsers(roleId, userIds));
-    }
 
 
 

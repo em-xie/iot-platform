@@ -102,4 +102,51 @@ public class SysUserController extends BaseController {
         return toAjax(userService.insertUser(user));
     }
 
+    /**
+     * 删除用户
+     *
+     * @param userIds 角色ID串
+     */
+    @SaCheckPermission("system:user:remove")
+    @Log(title = "用户管理", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{userIds}")
+    public R<Void> remove(@PathVariable Long[] userIds) {
+        if (ArrayUtil.contains(userIds, LoginHelper.getUserId())) {
+            return R.fail("当前用户不能删除");
+        }
+        return toAjax(userService.deleteUserByIds(userIds));
+    }
+
+
+    /**
+     * 修改用户
+     */
+    @SaCheckPermission("system:user:edit")
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public R<Void> edit(@Validated @RequestBody SysUserBo user) {
+        userService.checkUserAllowed(user.getUserId());
+//        userService.checkUserDataScope(user.getUserId());
+        if (!userService.checkUserNameUnique(user)) {
+            return R.fail("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
+        } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
+            return R.fail("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
+        } else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
+            return R.fail("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
+        }
+        return toAjax(userService.updateUser(user));
+    }
+
+    /**
+     * 用户授权角色
+     *
+     */
+    @SaCheckPermission("system:user:edit")
+    @Log(title = "用户管理", businessType = BusinessType.GRANT)
+    @PostMapping("/authRole")
+    public R<Void> insertAuthRole(@RequestBody SysUserVo vo) {
+//        userService.checkUserDataScope(userId);
+        userService.insertUserAuth(vo.getUserId(), vo.getRoleIds());
+        return R.ok();
+    }
 }

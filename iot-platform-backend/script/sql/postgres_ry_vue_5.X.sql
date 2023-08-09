@@ -580,6 +580,187 @@ insert into sys_role_menu values ('2', '1065');
 
 
 
+-- ----------------------------
+-- 11、字典类型表
+-- ----------------------------
+drop table if exists sys_dict_type;
+create table if not exists sys_dict_type
+(
+    dict_id     int8,
+    dict_name   varchar(100) default ''::varchar,
+    dict_type   varchar(100) default ''::varchar,
+    status      char         default '0'::bpchar,
+    create_dept int8,
+    create_by   int8,
+    create_time timestamp,
+    update_by   int8,
+    update_time timestamp,
+    remark      varchar(500) default null::varchar,
+    constraint sys_dict_type_pk primary key (dict_id)
+    );
+
+create unique index sys_dict_type_index1 ON sys_dict_type (dict_type);
+
+comment on table sys_dict_type                  is '字典类型表';
+comment on column sys_dict_type.dict_id         is '字典主键';
+comment on column sys_dict_type.dict_name       is '字典名称';
+comment on column sys_dict_type.dict_type       is '字典类型';
+comment on column sys_dict_type.status          is '状态（0正常 1停用）';
+comment on column sys_dict_type.create_dept     is '创建部门';
+comment on column sys_dict_type.create_by       is '创建者';
+comment on column sys_dict_type.create_time     is '创建时间';
+comment on column sys_dict_type.update_by       is '更新者';
+comment on column sys_dict_type.update_time     is '更新时间';
+comment on column sys_dict_type.remark          is '备注';
+
+insert into sys_dict_type values(1, '用户性别', 'sys_user_sex',        '0', 103, 1, now(), null, null, '用户性别列表');
+insert into sys_dict_type values(2, '菜单状态', 'sys_show_hide',       '0', 103, 1, now(), null, null, '菜单状态列表');
+insert into sys_dict_type values(3, '系统开关', 'sys_normal_disable',  '0', 103, 1, now(), null, null, '系统开关列表');
+insert into sys_dict_type values(6, '系统是否', 'sys_yes_no',          '0', 103, 1, now(), null, null, '系统是否列表');
+insert into sys_dict_type values(7, '通知类型', 'sys_notice_type',     '0', 103, 1, now(), null, null, '通知类型列表');
+insert into sys_dict_type values(8, '通知状态', 'sys_notice_status',   '0', 103, 1, now(), null, null, '通知状态列表');
+insert into sys_dict_type values(9, '操作类型', 'sys_oper_type',       '0', 103, 1, now(), null, null, '操作类型列表');
+insert into sys_dict_type values(10,'系统状态', 'sys_common_status',  '0', 103, 1, now(), null, null, '登录状态列表');
+insert into sys_dict_type values(11,'授权类型', 'sys_grant_type',     '0', 103, 1, now(), null, null, '认证授权类型');
+insert into sys_dict_type values(12,'设备类型', 'sys_device_type',    '0', 103, 1, now(), null, null, '客户端设备类型');
+insert into sys_dict_type values(13,'设备认证方式', 'link_device_auth_mode',    '0', 103, 1, now(), null, null, '设备管理鉴权方式');
+insert into sys_dict_type values(14,'设备连接实例', 'link_device_connector',    '0', 103, 1, now(), null, null, '设备连接实例');
+insert into sys_dict_type values(15,'设备状态', 'link_device_status',    '0', 103, 1, now(), null, null, '设备状态');
+insert into sys_dict_type values(16,'连接状态', 'link_device_connect_status',    '0', 103, 1, now(), null, null, '设备连接状态');
+insert into sys_dict_type values(17,'是否遗言', 'link_device_is_will',    '0', 103, 1, now(), null, null, '设备是否有遗言');
+insert into sys_dict_type values(18,'产品协议类型', 'link_device_protocol_type',    '0', 103, 1, now(), null, null, '产品协议类型 ：mqtt || coap || modbus || http');
+insert into sys_dict_type values(19,'设备类型', 'link_device_device_type',    '0', 103, 1, now(), null, null, '设备类型0-普通设备（无子设备也无父设备）1-网关设备(可挂载子设备)2-子设备(归属于某个网关设备)。');
+insert into sys_dict_type values(20,'集成应用类型', 'link_application_type',    '0', 103, 1, now(), null, null, '集成应用');
+insert into sys_dict_type values(21,'产品设备类型', 'link_product_device_type',    '0', 103, 1, now(), null, null, '产品设备类型，支持英文大小写、数字、下划线和中划线');
+insert into sys_dict_type values(22,'产品类型', 'link_product_type',    '0', 103, 1, now(), null, null, '支持以下两种产品类型：\n•0：普通产品，需直连设备。\n•1：网关产品，可挂载子设备。\n');
+insert into sys_dict_type values(23,'是否必填', 'link_product_isRequired',    '0', 103, 1, now(), null, null, NULL);
+insert into sys_dict_type values(24,'CAS策略类型', 'link_casbinRule_v3',    '0', 103, 1, now(), null, null, 'CAS策略类型：允许||拒绝');
+insert into sys_dict_type values(25,'CAS策略动作', 'link_casbinRule_v2',    '0', 103, 1, now(), null, null, '认证动作');
+insert into sys_dict_type values(26,'设备动作类型', 'link_device_action_type',    '0', 103, 1, now(), null, null, NULL);
+insert into sys_dict_type values(27,'设备影子状态', 'link_deviceInfo_shadow_enable',    '0', 103, 1, now(), null, null, '是否支设备影子');
+insert into sys_dict_type values(28,'业务数据状态', 'business_data_status',    '0', 103, 1, now(), null, null, '业务数据状态标识（0启用  1停用）');
+insert into sys_dict_type values(29,'指示数据类型', 'link_product_datatype',    '0', 103, 1, now(), null, null, '产品模型指示数据类型');
+insert into sys_dict_type values(30,'协议语言', 'link_protocol_voice',    '0', 103, 1, now(), null, null, '协议管理-支持的协议脚本语言');
+
+-- ----------------------------
+-- 12、字典数据表
+-- ----------------------------
+drop table if exists sys_dict_data;
+create table if not exists sys_dict_data
+(
+    dict_code   int8,
+    dict_sort   int4         default 0,
+    dict_label  varchar(100) default ''::varchar,
+    dict_value  varchar(100) default ''::varchar,
+    dict_type   varchar(100) default ''::varchar,
+    css_class   varchar(100) default null::varchar,
+    list_class  varchar(100) default null::varchar,
+    is_default  char         default 'N'::bpchar,
+    status      char         default '0'::bpchar,
+    create_dept int8,
+    create_by   int8,
+    create_time timestamp,
+    update_by   int8,
+    update_time timestamp,
+    remark      varchar(500) default null::varchar,
+    constraint sys_dict_data_pk primary key (dict_code)
+    );
+
+comment on table sys_dict_data                  is '字典数据表';
+comment on column sys_dict_data.dict_code       is '字典编码';
+comment on column sys_dict_data.dict_sort       is '字典排序';
+comment on column sys_dict_data.dict_label      is '字典标签';
+comment on column sys_dict_data.dict_value      is '字典键值';
+comment on column sys_dict_data.dict_type       is '字典类型';
+comment on column sys_dict_data.css_class       is '样式属性（其他样式扩展）';
+comment on column sys_dict_data.list_class      is '表格回显样式';
+comment on column sys_dict_data.is_default      is '是否默认（Y是 N否）';
+comment on column sys_dict_data.status          is '状态（0正常 1停用）';
+comment on column sys_dict_data.create_dept     is '创建部门';
+comment on column sys_dict_data.create_by       is '创建者';
+comment on column sys_dict_data.create_time     is '创建时间';
+comment on column sys_dict_data.update_by       is '更新者';
+comment on column sys_dict_data.update_time     is '更新时间';
+comment on column sys_dict_data.remark          is '备注';
+
+insert into sys_dict_data values(1, 1,  '男',       '0',       'sys_user_sex',        '',   '',        'Y', '0', 103, 1, now(), null, null, '性别男');
+insert into sys_dict_data values(2, 2,  '女',       '1',       'sys_user_sex',        '',   '',        'N', '0', 103, 1, now(), null, null, '性别女');
+insert into sys_dict_data values(3, 3,  '未知',     '2',       'sys_user_sex',        '',   '',        'N', '0', 103, 1, now(), null, null, '性别未知');
+insert into sys_dict_data values(4, 1,  '显示',     '0',       'sys_show_hide',       '',   'primary', 'Y', '0', 103, 1, now(), null, null, '显示菜单');
+insert into sys_dict_data values(5, 2,  '隐藏',     '1',       'sys_show_hide',       '',   'danger',  'N', '0', 103, 1, now(), null, null, '隐藏菜单');
+insert into sys_dict_data values(6, 1,  '正常',     '0',       'sys_normal_disable',  '',   'primary', 'Y', '0', 103, 1, now(), null, null, '正常状态');
+insert into sys_dict_data values(7, 2,  '停用',     '1',       'sys_normal_disable',  '',   'danger',  'N', '0', 103, 1, now(), null, null, '停用状态');
+insert into sys_dict_data values(12, 1,  '是',       'Y',       'sys_yes_no',          '',   'primary', 'Y', '0', 103, 1, now(), null, null, '系统默认是');
+insert into sys_dict_data values(13, 2,  '否',       'N',       'sys_yes_no',          '',   'danger',  'N', '0', 103, 1, now(), null, null, '系统默认否');
+insert into sys_dict_data values(14, 1,  '通知',     '1',       'sys_notice_type',     '',   'warning', 'Y', '0', 103, 1, now(), null, null, '通知');
+insert into sys_dict_data values(15, 2,  '公告',     '2',       'sys_notice_type',     '',   'success', 'N', '0', 103, 1, now(), null, null, '公告');
+insert into sys_dict_data values(16, 1,  '正常',     '0',       'sys_notice_status',   '',   'primary', 'Y', '0', 103, 1, now(), null, null, '正常状态');
+insert into sys_dict_data values(17, 2,  '关闭',     '1',       'sys_notice_status',   '',   'danger',  'N', '0', 103, 1, now(), null, null, '关闭状态');
+insert into sys_dict_data values(29, 99, '其他',     '0',       'sys_oper_type',       '',   'info',    'N', '0', 103, 1, now(), null, null, '其他操作');
+insert into sys_dict_data values(18, 1,  '新增',     '1',       'sys_oper_type',       '',   'info',    'N', '0', 103, 1, now(), null, null, '新增操作');
+insert into sys_dict_data values(19, 2,  '修改',     '2',       'sys_oper_type',       '',   'info',    'N', '0', 103, 1, now(), null, null, '修改操作');
+insert into sys_dict_data values(20, 3,  '删除',     '3',       'sys_oper_type',       '',   'danger',  'N', '0', 103, 1, now(), null, null, '删除操作');
+insert into sys_dict_data values(21, 4,  '授权',     '4',       'sys_oper_type',       '',   'primary', 'N', '0', 103, 1, now(), null, null, '授权操作');
+insert into sys_dict_data values(22, 5,  '导出',     '5',       'sys_oper_type',       '',   'warning', 'N', '0', 103, 1, now(), null, null, '导出操作');
+insert into sys_dict_data values(23, 6,  '导入',     '6',       'sys_oper_type',       '',   'warning', 'N', '0', 103, 1, now(), null, null, '导入操作');
+insert into sys_dict_data values(24, 7,  '强退',     '7',       'sys_oper_type',       '',   'danger',  'N', '0', 103, 1, now(), null, null, '强退操作');
+insert into sys_dict_data values(25, 8,  '生成代码', '8',       'sys_oper_type',       '',   'warning', 'N', '0', 103, 1, now(), null, null, '生成操作');
+insert into sys_dict_data values(26, 9,  '清空数据', '9',       'sys_oper_type',       '',   'danger',  'N', '0', 103, 1, now(), null, null, '清空操作');
+insert into sys_dict_data values(27, 1,  '成功',     '0',       'sys_common_status',   '',   'primary', 'N', '0', 103, 1, now(), null, null, '正常状态');
+insert into sys_dict_data values(28, 2,  '失败',     '1',       'sys_common_status',   '',   'danger',  'N', '0', 103, 1, now(), null, null, '停用状态');
+insert into sys_dict_data values(30, 0,  '密码认证', 'password',   'sys_grant_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '密码认证');
+insert into sys_dict_data values(31, 0,  '短信认证', 'sms',        'sys_grant_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '短信认证');
+insert into sys_dict_data values(32, 0,  '邮件认证', 'email',      'sys_grant_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '邮件认证');
+insert into sys_dict_data values(33, 0,  '小程序认证', 'xcx',      'sys_grant_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '小程序认证');
+insert into sys_dict_data values(34, 0,  '三方登录认证', 'social', 'sys_grant_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '三方登录认证');
+insert into sys_dict_data values(35, 0,  'PC', 'pc',              'sys_device_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'PC');
+insert into sys_dict_data values(36, 0,  '安卓', 'android',       'sys_device_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '安卓');
+insert into sys_dict_data values(37, 0,  'iOS', 'ios',            'sys_device_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'iOS');
+insert into sys_dict_data values(38, 0,  '小程序', 'xcx',         'sys_device_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '小程序');
+insert into sys_dict_data values(39, 0,  '默认', 'default',         'link_device_auth_mode',   '',   'default', 'N', '0', 103, 1, now(), null, null, '设备用户名+设备密码');
+insert into sys_dict_data values(40, 1,  'SSL/TLS', 'SSL/TLS',         'link_device_auth_mode',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'SSL/TLS认证');
+insert into sys_dict_data values(41, 0,  '127.0.0.1:11883', '127.0.0.1:11883',         'link_device_connector',   '',   'default', 'N', '0', 103, 1, now(), null, null, '本地默认节点');
+insert into sys_dict_data values(42, 0,  '启用', 'ENABLE',         'link_device_status',   '',   'success', 'N', '0', 103, 1, now(), null, null, '设备启用');
+insert into sys_dict_data values(43, 1,  '禁用', 'DISABLE',         'link_device_status',   '',   'danger', 'N', '0', 103, 1, now(), null, null, '设备禁用');
+insert into sys_dict_data values(44, 1,  '在线', 'ONLINE',         'link_device_connect_status',   '',   'success', 'N', '0', 103, 1, now(), null, null, '设备在线');
+insert into sys_dict_data values(45, 2,  '离线', 'OFFLINE',         'link_device_connect_status',   '',   'warning', 'N', '0', 103, 1, now(), null, null, '设备离线');
+insert into sys_dict_data values(46, 0,  '未连接', 'INIT',         'link_device_connect_status',   '',   'info', 'N', '0', 103, 1, now(), null, null, '设备未连接');
+insert into sys_dict_data values(47, 0,  '是', '0',         'link_device_is_will',   '',   'primary', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(48, 0,  '否', '1',         'link_device_is_will',   '',   'warning', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(49, 0,  'mqtt', 'MQTT',         'link_device_protocol_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'mqtt');
+insert into sys_dict_data values(50, 1,  'coap', 'COAP',         'link_device_protocol_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'coap');
+insert into sys_dict_data values(51, 2,  'modbus', 'MODBUS',         'link_device_protocol_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'modbus');
+insert into sys_dict_data values(52, 3,  'http', 'HTTP',         'link_device_protocol_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'http');
+insert into sys_dict_data values(53, 0,  '普通设备', 'COMMON',         'link_device_device_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '普通设备（无子设备也无父设备）');
+insert into sys_dict_data values(54, 1,  '网关设备', 'GATEWAY',         'link_device_device_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '网关设备(可挂载子设备)');
+insert into sys_dict_data values(55, 0,  'thinglinks', 'thinglinks',         'link_application_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'thinglinks');
+insert into sys_dict_data values(56, 1,  '218.78.103.93:11883', '218.78.103.93:11883',         'link_device_connector',   '',   'default', 'N', '0', 103, 1, now(), null, null, '物联网测试环境');
+insert into sys_dict_data values(57, 0,  'Default', 'default',         'link_product_device_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '默认');
+insert into sys_dict_data values(58, 0,  '普通产品', 'COMMON',         'link_product_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '普通产品，需直连设备。');
+insert into sys_dict_data values(59, 1,  '网关产品', 'GATEWAY',         'link_product_type',   '',   'default', 'N', '0', 103, 1, now(), null, null, '网关产品，可挂载子设备。');
+insert into sys_dict_data values(60, 0,  '非必填', '0',         'link_product_isRequired',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(61, 0,  '必填', '1',         'link_product_isRequired',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(62, 0,  '允许', 'allow',         'link_casbinRule_v3',   '',   'success', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(63, 0,  '拒绝', 'deny',         'link_casbinRule_v3',   '',   'warning', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(64, 0,  '发布', 'PUBLISH',         'link_casbinRule_v2',   '',   'primary', 'N', '0', 103, 1, now(), null, null, '发布动作');
+insert into sys_dict_data values(65, 0,  '订阅', 'SUBSCRIBE',         'link_casbinRule_v2',   '',   'info', 'N', '0', 103, 1, now(), null, null, '订阅动作');
+insert into sys_dict_data values(66, 0,  '上线', 'ONLINE',         'link_device_action_type',   '',   'success', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(67, 0,  '离线', 'OFFLINE',         'link_device_action_type',   '',   'warning', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(68, 0,  '是', 'true',         'link_deviceInfo_shadow_enable',   '',   'primary', 'N', '0', 103, 1, now(), null, null, '支持设备影子');
+insert into sys_dict_data values(69, 0,  '否', 'false',         'link_deviceInfo_shadow_enable',   '',   'danger', 'N', '0', 103, 1, now(), null, null, '不支持设备影子');
+insert into sys_dict_data values(70, 0,  '启用', '0',         'business_data_status',   '',   'success', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(71, 0,  '停用', '1',         'business_data_status',   '',   'danger', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(72, 0,  'string', 'string',         'link_product_datatype',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(73, 0,  'binary', 'binary',         'link_product_datatype',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(74, 0,  'int', 'int',         'link_product_datatype',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(75, 0,  'bool', 'bool',         'link_product_datatype',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(76, 0,  'decimal', 'decimal',         'link_product_datatype',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(77, 0,  'timestamp', 'timestamp',         'link_product_datatype',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(78, 0,  'json', 'json',         'link_product_datatype',   '',   'default', 'N', '0', 103, 1, now(), null, null, null);
+insert into sys_dict_data values(79, 0,  'java', 'java',         'link_protocol_voice',   '',   'default', 'N', '0', 103, 1, now(), null, null, 'java');
+insert into sys_dict_data values(80, 3,  '协议管理', 'PROTOCOL',         'sys_job_group',   '',   'default', 'N', '0', 103, 1, now(), null, null, '协议管理');
+insert into sys_dict_data values(81, 4,  '规则触发器', 'RULE_TRIGGER',         'sys_job_group',   '',   'default', 'N', '0', 103, 1, now(), null, null, '设备联动规则触发器');
+insert into sys_dict_data values(82, 5,  '设备管理', 'LINK_DEVICE',         'sys_job_group',   '',   'default', 'N', '0', 103, 1, now(), null, null, '设备管理');
 
 
 
